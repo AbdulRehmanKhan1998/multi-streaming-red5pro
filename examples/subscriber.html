@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+
+<head>
+    <link href="subscriber.css" rel="stylesheet">
+    <!-- Recommended shim for cross-browser WebRTC support. -->
+    <script src="https://webrtchacks.github.io/adapter/adapter-latest.js"></script>
+    <!-- Default Red5 Pro Playback Control styles. -->
+    <link href="lib/red5pro/red5pro-media.css" rel="stylesheet">
+    <!-- Fullscreen shim. -->
+    <script src="lib/screenfull/screenfull.min.js"></script>
+</head>
+
+<body>
+<header>
+    <h2>Subscriber's Stream</h2>
+</header>
+<!-- `autoplay` will immediately show preview video. `muted` will mute the audio to avoid feedback noise. -->
+<div class="container">
+
+    <div class="stream" style="height: 90vh !important;">
+
+
+        <video autoplay class="red5pro-media red5pro-media-background" controls id="red5pro-subscriber">
+        </video>
+
+    </div>
+    <div class='stream-chat'>
+
+        <h1>Chat</h1>
+
+        <div class='overflow'>
+            <div id='messages'>
+                <textarea disabled id="so-field"></textarea>
+            </div>
+        </div>
+
+        <div id='input-area'>
+            <textarea id='text-area' type='text'></textarea>
+            <button id='send'>Send</button>
+        </div>
+
+    </div>
+
+</div>
+<!-- Exposes `red5prosdk` on the window global. -->
+<script src="lib/red5pro/red5pro-sdk.min.js"></script>
+<!-- Example script below. -->
+<script src="subscriber.js"></script>
+</body>
+
+</html>

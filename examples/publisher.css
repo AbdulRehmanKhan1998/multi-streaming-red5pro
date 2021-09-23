@@ -1,0 +1,135 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+body {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    background-color: #181818;
+    font-family: "Roboto", sans-serif;
+    overflow-x: hidden;
+}
+
+header {
+    display: flex;
+    padding: 3vh;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    box-shadow: 2px 2px 5px;
+}
+
+header h2 {
+    color: white;
+    font-family: "Roboto", sans-serif;
+    padding: 0%;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    width: 100vw;
+    align-items: stretch;
+}
+
+.stream {
+    display: flex;
+    justify-content: center;
+    padding: 10vh;
+    align-items: center;
+    width: 75vw;
+}
+
+.stream video {
+    position: float;
+    height: 480px;
+    width: 854px;
+    border: 3px solid #ececec;
+    box-sizing: border-box;
+}
+
+.stream-chat {
+    display: flex;
+    width: 30vw;
+    flex-direction: column;
+    margin-left: 60px;
+}
+
+.stream-chat h1 {
+    background: #2B2B2B;
+    color: #EEEEEE;
+    text-align: center;
+    font-weight: 300;
+    font-size: 18px;
+    margin: 0%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#input-area {
+    display: flex;
+    min-height: 25vh;
+    flex-direction: column;
+    background: #1D1D1D;
+    padding: 15px;
+}
+
+
+#send {
+    align-self: flex-end;
+    padding: 8px 15px;
+    margin: 3px;
+    background: #632F9F;
+    border: none;
+    color: #F8EBEC;
+    font-weight: 900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0px #4a2378;
+}
+
+#text-area {
+    flex-grow: 1;
+    border: 5px solid #282828;
+    flex-grow: 1;
+    background: #090909;
+    color: #919090;
+    margin-bottom: 0.7em;
+    resize: none;
+}
+
+#text-area:focus {
+    outline: none;
+}
+
+.overflow {
+    overflow-y: scroll;
+}
+
+#messages {
+    min-height: 53vh;
+    background: linear-gradient(to bottom, #2B2B2B, #1D1D1D);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-left: 12px;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #130303;
+}
+
+::-webkit-scrollbar, ::-webkit-scrollbar-button, ::-webkit-scrollbar-track, ::-webkit-scrollbar-track-piece, ::-webkit-scrollbar-corner, ::-webkit-resizer {
+    background: #ececec;
+}
+
+/*-------------------*/
+
