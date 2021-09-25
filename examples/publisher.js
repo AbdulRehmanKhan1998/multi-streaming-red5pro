@@ -1,6 +1,6 @@
-(async (red5prosdk) => {
-    const publisher = new red5prosdk.RTCPublisher();
+(async(red5prosdk) => {
 
+    const publisher = new red5prosdk.RTCPublisher();
     const soField = document.getElementById('so-field');
     const sendButton = document.getElementById('send');
 
@@ -8,9 +8,9 @@
     let so = undefined;
 
     const configuration = {
-        protocol: "wss",
-        port: 443,
-        host: "red5stream.searceinc.org",
+        protocol: "ws",
+        port: 5080,
+        host: "localhost",
         app: "live",
         streamName: "mystream",
         rtcConfiguration: {
@@ -42,7 +42,7 @@
     }
 
     publisher.init(configuration).then(() => {
-        console.log('LOG :: Init Done');
+        console.log('LOG :: Publish Init Done');
         publisher.publish();
     }).then(() => {
         console.log('LOG :: Publish Done');
@@ -58,6 +58,7 @@
     const messageTransmit = (message) => {
         soField.value = ['User "' + message.user + '": ' + message.message, soField.value].join('\n');
     }
+    
 
     const establishSharedObject = (publisher) => {
         so = new SharedObject('sharedObjectTest', publisher)

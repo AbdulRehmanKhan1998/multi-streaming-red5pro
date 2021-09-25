@@ -6,9 +6,9 @@
     let so = undefined;
 
     const configuration = {
-        protocol: 'wss',
-        port: 443,
-        host: 'red5stream.searceinc.org',
+        protocol: 'ws',
+        port: 5080,
+        host: 'localhost',
         app: 'live',
         streamName: 'mystream',
         rtcConfiguration: {
@@ -26,10 +26,10 @@
 
     // Initialize
     subscriber.init(configuration).then(() => {
-        console.log("stream published 1")
+        console.log('LOG :: Subscribe Init Done')
         subscriber.subscribe();
     }).then(() => {
-        console.log("stream published 2")
+        console.log('LOG :: Subscribe Done')
         establishSharedObject(subscriber);
     }).catch((error) => {
         console.log('ERROR :: ' + error);
@@ -43,14 +43,14 @@
         soField.value = ['User "' + message.user + '": ' + message.message, soField.value].join('\n');
     }
 
-    establishSharedObject = (subscriber) => {
+    const establishSharedObject = (subscriber) => {
         try {
-            so = new SharedObject('sharedChatTest', subscriber);
+            so = new SharedObject('sharedObjectTest', subscriber);
         } catch (err) {
             console.log('error :: ' + err)
         }
 
-        let soCallback = {
+        const soCallback = {
             messageTransmit: messageTransmit
         };
 
