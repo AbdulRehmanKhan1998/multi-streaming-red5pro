@@ -3,7 +3,6 @@
     const soField = document.getElementById('so-field');
     const SharedObject = red5prosdk.Red5ProSharedObject;
     const sendButton = document.getElementById('send');
-    let so = undefined;
 
     const configuration = {
         protocol: 'ws',
@@ -35,12 +34,15 @@
         console.log('ERROR :: ' + error);
     });
 
-    const appendMessage = (message) => {
-        soField.value = [message, soField.value].join('\n');
-    }
 
     const messageTransmit = (message) => {
-        soField.value = ['User "' + message.user + '": ' + message.message, soField.value].join('\n');
+        var div = document.getElementById("messages");
+        var input = document.createElement("textarea");
+        input.id = "so-field" + Math.random().toString(16).slice(2)
+        input.setAttribute('enabled', true);
+        div.appendChild(input);
+        const soField = document.getElementById(input.id);
+        soField.value = ['User "' + message.user + '": ' + message.message];
     }
 
     const establishSharedObject = (subscriber) => {
@@ -56,7 +58,7 @@
 
         so.on(red5prosdk.SharedObjectEventTypes.CONNECT_SUCCESS, (event) => {
             console.log('[Red5ProSubscriber] SharedObject Connect.');
-            appendMessage('Connected.');
+            window.alert("connected")
         });
 
         so.on(red5prosdk.SharedObjectEventTypes.CONNECT_FAILURE, (event) => {
@@ -81,7 +83,7 @@
         if (message != undefined) {
             console.log(message);
             so.send('messageTransmit', {
-                user: "mystream",
+                user: "Student",
                 message: message
             });
         }
