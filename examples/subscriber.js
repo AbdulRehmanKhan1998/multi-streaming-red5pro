@@ -1,15 +1,18 @@
 ((red5prosdk) => {
     const subscriber = new red5prosdk.RTCSubscriber();
-    const soField = document.getElementById('so-field');
     const SharedObject = red5prosdk.Red5ProSharedObject;
     const sendButton = document.getElementById('send');
 
     const configuration = {
-        protocol: 'ws',
-        port: 5080,
-        host: 'localhost',
+        protocol: "wss",
+        port: 443,
+        host: "red5stream.searceinc.org",
+        // protocol: 'ws',
+        // port: 5080,
+        // host: 'localhost',
         app: 'live',
-        streamName: 'mystream',
+        streamName1: 'mystream1',
+        streamName2: 'mystream2',
         rtcConfiguration: {
             iceServers: [{urls: 'stun:stun2.l.google.com:19302'}],
             iceCandidatePoolSize: 2,
@@ -55,10 +58,11 @@
         const soCallback = {
             messageTransmit: messageTransmit
         };
-
+        // var hasRegistered=false;
         so.on(red5prosdk.SharedObjectEventTypes.CONNECT_SUCCESS, (event) => {
             console.log('[Red5ProSubscriber] SharedObject Connect.');
             window.alert("connected")
+            
         });
 
         so.on(red5prosdk.SharedObjectEventTypes.CONNECT_FAILURE, (event) => {
@@ -68,6 +72,17 @@
         so.on(red5prosdk.SharedObjectEventTypes.PROPERTY_UPDATE, (event) => {
             console.log('[Red5ProPublisher] SharedObject Property Update.');
             console.log(JSON.stringify(event.data, null, 2));
+            // if (event.data.hasOwnProperty('count')) {
+            //     console.log('User count is: ' + event.data.count + '.')
+            //     if (!hasRegistered) {
+            //       hasRegistered = true
+            //       so.setProperty('count', parseInt(event.data.count) + 1)
+            //     }
+            //   }
+            //   else if (!hasRegistered) {
+            //     hasRegistered = true
+            //     so.setProperty('count', 1)
+            //   }
         });
 
         so.on(red5prosdk.SharedObjectEventTypes.METHOD_UPDATE, function (event) {
@@ -88,4 +103,8 @@
             });
         }
     });
+    // console.log(subscriber.getPeerConnection())
+
+
+
 })(window.red5prosdk);
