@@ -89,7 +89,9 @@ header h2 {
     border-radius: 5px;
     box-shadow: 0 0 10px 0px #4a2378;
 }
-
+#media-screen{
+    display: none;
+}
 #text-area {
     flex-grow: 1;
     border: 5px solid #282828;

@@ -18,7 +18,9 @@ header {
     z-index: 999;
     box-shadow: 2px 2px 5px;
 }
-
+#media-screen{
+    display: none;
+}
 header h2 {
     color: white;
     font-family: "Roboto", sans-serif;

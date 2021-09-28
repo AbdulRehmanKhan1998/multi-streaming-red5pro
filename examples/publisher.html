@@ -5,18 +5,27 @@
     <!-- Recommended shim for cross-browser WebRTC support. -->
     <script src="https://webrtchacks.github.io/adapter/adapter-latest.js"></script>
     <link href="publisher.css" rel="stylesheet">
+    <script src="lib/screenfull/screenfull.min.js"></script>
+    <link href="lib/red5pro/red5pro-media.css" rel="stylesheet">
+  
 </head>
 
 <body >
 <header>
-    <h2>My Stream</h2>
+    <h2>Teacher's stream</h2>
 </header>
-<!-- `autoplay` will immediately show preview video. `muted` will mute the audio to avoid feedback noise. -->
-<div class="container">
 
-    <div class="stream">
-        <video autoplay id="red5pro-publisher" muted></video>
+<button type="button" id="publishTeacher">Join my class</button>
+<button type="button" id="subscribeStudents">Show Student</button>
+
+
+<!-- `autoplay` will immediately show preview video. `muted` will mute the audio to avoid feedback noise. -->
+<div class="container" id="media-screen">
+
+    <div class="stream" id="stream-publisher">
+        <video autoplay id="red5pro-publisher" class="red5pro-media red5pro-media-background " controls muted></video>
     </div>
+
     <div class='stream-chat'>
 
         <h1>Chat</h1>
