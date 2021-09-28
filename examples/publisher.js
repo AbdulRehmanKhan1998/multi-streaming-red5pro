@@ -3,6 +3,7 @@
     const publisher = new red5prosdk.RTCPublisher();
     const sendButton = document.getElementById('send');
     const SharedObject = red5prosdk.Red5ProSharedObject;
+    var newStreamName=undefined;
 
     const configuration = {
         // protocol: "ws",
@@ -72,6 +73,12 @@ joinmyclassButton.addEventListener('click', () => {
         const soField = document.getElementById(input.id);
         soField.value = ['User "' + message.user + '": ' + message.message];
     }
+    const testTransmit = (message) => {
+        console.log("rehman");
+        console.log(message.message);
+        newStreamName=message.message;
+        console.log(newStreamName);
+    }
 
     // const streamTransmit=(stream)=>{
     //     try {
@@ -90,7 +97,8 @@ joinmyclassButton.addEventListener('click', () => {
     const establishSharedObject = (publisher) => {
         so = new SharedObject('sharedObjectTest', publisher)
         const soCallback = {
-            messageTransmit: messageTransmit
+            messageTransmit: messageTransmit,
+            testTransmit:testTransmit
         };
         // const soCallbackVideoStream={
         //     streamTransmit: streamTransmit
@@ -219,41 +227,47 @@ joinmyclassButton.addEventListener('click', () => {
         // port: 5080,
         // host: 'localhost',
         app: 'live',
-        streamName: "mystream2",
+        streamName: newStreamName,
         rtcConfiguration: {
             iceServers: [{urls: 'stun:stun2.l.google.com:19302'}],
             iceCandidatePoolSize: 2,
             bundlePolicy: 'max-bundle'
         },
         mediaElementId: video.id,
-        publishingId: 'mystream2' + Math.floor(Math.random() * 0x10000).toString(16),
+        subscriptionId: 'mystream2' + Math.floor(Math.random() * 0x10000).toString(16),
         videoEncoding: 'NONE',
         audioEncoding: 'NONE',
         rtcpMuxPolicy: 'negotiate',
         }
 
+        
+        console.log(SubscriberConfiguration);
+        
        // Initialize
 const showStudentButton = document.getElementById("subscribeStudents");
 const startSubscribingStudentStream = () => {
     subscriber.init(SubscriberConfiguration).then(() => {
         console.log('LOG :: Subscribe Init Done')
         subscriber.subscribe();
+        console.log(SubscriberConfiguration.streamName);
     
     }).then(() => {
         console.log('LOG :: Subscribe Done')
     }).catch((error) => {
+        console.log("error coming");
         console.log('ERROR :: ' + error);
     });
 }
 showStudentButton.addEventListener('click', () => {
-
+    SubscriberConfiguration["streamName"]=newStreamName ;
+    console.log(SubscriberConfiguration);
     var divStream = document.getElementById("media-screen");
     var div = document.createElement('div');
     div.className="stream";
   
     video.setAttribute("autoplay",true);
     video.setAttribute("controls",true);
-    video.setAttribute("muted",true);
+    video.setAttribute("muted",false);
     video.setAttribute("class","red5pro-media");
     video.setAttribute("class","red5pro-media-background");
     div.append(video);

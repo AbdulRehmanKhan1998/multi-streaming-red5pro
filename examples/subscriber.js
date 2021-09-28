@@ -4,6 +4,24 @@
     const sendButton = document.getElementById('send');
     // const streamButton = document.getElementById('sendStream');
     var so=undefined;
+
+    function makeid(length) {
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() * 
+     charactersLength));
+       }
+       return result;
+    }
+    const streamNameTemp=makeid(5);
+    
+    console.log(streamNameTemp);
+
+
+
+
     
     const configuration = {
         protocol: "wss",
@@ -44,8 +62,10 @@ const showTeacherButton = document.getElementById("subscribeTeacher");
 }
 showTeacherButton.addEventListener('click', () => {
     startSubscribingTeacherStream();
+    
     var T = document.getElementById("media-screen");
     T.style.display = "flex";
+    
     
 });
 
@@ -59,6 +79,9 @@ showTeacherButton.addEventListener('click', () => {
         const soField = document.getElementById(input.id);
         soField.value = ['User "' + message.user + '": ' + message.message];
     }
+    const testTransmit = (message) => {
+        console.log(message.message)
+    }
     const establishSharedObject = (subscriber) => {
         try {
             so = new SharedObject('sharedObjectTest', subscriber);
@@ -67,7 +90,8 @@ showTeacherButton.addEventListener('click', () => {
         }
 
         const soCallback = {
-            messageTransmit: messageTransmit
+            messageTransmit: messageTransmit,
+            testTransmit:testTransmit
         };
         
         so.on(red5prosdk.SharedObjectEventTypes.CONNECT_SUCCESS, (event) => {
@@ -102,12 +126,14 @@ showTeacherButton.addEventListener('click', () => {
         if (message != undefined) {
             console.log(message);
             console.log("sub" +"before send function")
+            
             so.send('messageTransmit', {
-                user: "Student",
+                user: configuration.subscriptionId,
                 message: message
             });
         }
     });
+    
 
     //start publishing from here:
     const publisher = new red5prosdk.RTCPublisher();
@@ -149,14 +175,30 @@ showTeacherButton.addEventListener('click', () => {
             },
         },
     }
+    configurationPublisher["streamName"]=streamNameTemp;
+    
+
+
     const joinmyclassButton = document.getElementById("publishStudent");
     const startPublishingStudentStream = () => {
         publisher.init(configurationPublisher).then(() => {
             console.log('LOG :: Publish Init Done');
             publisher.publish();
+            console.log(configurationPublisher.streamName);
             
         }).then(() => {
             console.log('LOG :: Publish Done');
+            generateStream() ;
+            // let message = streamNameTemp;
+            // if (message != undefined) {
+            //     console.log(message);
+            //     console.log("sub" +"before send function")
+                
+            //     so.send('testTransmit', {
+            //         user: configuration.subscriptionId,
+            //         message: message
+            //     });
+            // }
         }).catch((error) => {
             console.log('ERROR :: ' + error);
         });
@@ -169,7 +211,7 @@ showTeacherButton.addEventListener('click', () => {
     div.className="stream";
     video.setAttribute("autoplay",true);
     video.setAttribute("controls",true);
-    video.setAttribute("muted",true);
+    video.setAttribute("muted",false);
     video.setAttribute("class","red5pro-media");
     video.setAttribute("class","red5pro-media-background");
     div.append(video);
@@ -180,6 +222,36 @@ showTeacherButton.addEventListener('click', () => {
         T.style.display = "flex";
         
     });
+
+    // const generateStreamNameButton = document.getElementById("generateStreamName");
+    async function generateStream () {
+        let message = streamNameTemp;
+        if (message != undefined) {
+            console.log(message);
+            console.log("sub" +"before send function")
+            
+            await so.send('testTransmit', {
+                user: configuration.subscriptionId,
+                message: message
+            });
+        }};
+    // });
+
+
+    // async function testFunction(){
+    //     console.log(so);
+    //     await so.send('messageTransmit', {
+    //         user: "random",
+    //         message: "random_string"
+    //     });
+    // }
+    // const d=testFunction()
+    
+
+
+
+
+    
     
 
 })(window.red5prosdk);
