@@ -80,7 +80,7 @@ showTeacherButton.addEventListener('click', () => {
         soField.value = ['User "' + message.user + '": ' + message.message];
     }
     const testTransmit = (message) => {
-        console.log(message.message)
+        console.log(message)
     }
     const establishSharedObject = (subscriber) => {
         try {
@@ -137,7 +137,18 @@ showTeacherButton.addEventListener('click', () => {
 
     //start publishing from here:
     const publisher = new red5prosdk.RTCPublisher();
-    var video = document.createElement("video");
+
+    // const startPublishingStudentStream = () => {
+       
+    // }
+
+    const joinmyclassButton = document.getElementById("publishStudent");
+
+joinmyclassButton.addEventListener('click', () => {
+
+
+
+        var video = document.createElement("video");
     video.id="red5pro-publisher"+Math.random().toString(16).slice(2);
     const configurationPublisher = {
         // protocol: "ws",
@@ -178,74 +189,51 @@ showTeacherButton.addEventListener('click', () => {
     configurationPublisher["streamName"]=streamNameTemp;
     
 
+        var divStream = document.getElementById("media-screen");
+        var div = document.createElement('div');
+        div.className="stream";
+        video.setAttribute("autoplay",true);
+        video.setAttribute("controls",true);
+        video.setAttribute("muted",false);
+        video.setAttribute("class","red5pro-media");
+        video.setAttribute("class","red5pro-media-background");
+        div.append(video);
+        divStream.append(div);
 
-    const joinmyclassButton = document.getElementById("publishStudent");
-    const startPublishingStudentStream = () => {
+
+
         publisher.init(configurationPublisher).then(() => {
             console.log('LOG :: Publish Init Done');
             publisher.publish();
             console.log(configurationPublisher.streamName);
+            console.log(configurationPublisher);
             
         }).then(() => {
             console.log('LOG :: Publish Done');
             generateStream() ;
-            // let message = streamNameTemp;
-            // if (message != undefined) {
-            //     console.log(message);
-            //     console.log("sub" +"before send function")
-                
-            //     so.send('testTransmit', {
-            //         user: configuration.subscriptionId,
-            //         message: message
-            //     });
-            // }
         }).catch((error) => {
             console.log('ERROR :: ' + error);
         });
-    }
-    joinmyclassButton.addEventListener('click', () => {
-
-   
-    var divStream = document.getElementById("media-screen");
-    var div = document.createElement('div');
-    div.className="stream";
-    video.setAttribute("autoplay",true);
-    video.setAttribute("controls",true);
-    video.setAttribute("muted",false);
-    video.setAttribute("class","red5pro-media");
-    video.setAttribute("class","red5pro-media-background");
-    div.append(video);
-    divStream.append(div);
-
-        startPublishingStudentStream();
+        // startPublishingStudentStream();
         var T = document.getElementById("media-screen");
         T.style.display = "flex";
         
     });
 
     // const generateStreamNameButton = document.getElementById("generateStreamName");
-    async function generateStream () {
+    function generateStream () {
         let message = streamNameTemp;
         if (message != undefined) {
             console.log(message);
             console.log("sub" +"before send function")
             
-            await so.send('testTransmit', {
+            so.send('testTransmit', {
                 user: configuration.subscriptionId,
                 message: message
             });
         }};
     // });
 
-
-    // async function testFunction(){
-    //     console.log(so);
-    //     await so.send('messageTransmit', {
-    //         user: "random",
-    //         message: "random_string"
-    //     });
-    // }
-    // const d=testFunction()
     
 
 

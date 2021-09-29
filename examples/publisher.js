@@ -4,6 +4,7 @@
     const sendButton = document.getElementById('send');
     const SharedObject = red5prosdk.Red5ProSharedObject;
     var newStreamName=undefined;
+    var studentName=undefined;
 
     const configuration = {
         // protocol: "ws",
@@ -77,6 +78,7 @@ joinmyclassButton.addEventListener('click', () => {
         console.log("rehman");
         console.log(message.message);
         newStreamName=message.message;
+        studentName=message.user;
         console.log(newStreamName);
     }
 
@@ -215,10 +217,46 @@ joinmyclassButton.addEventListener('click', () => {
 
 
 
-    const subscriber = new red5prosdk.RTCSubscriber();
+
+       // Initialize
+const showStudentButton = document.getElementById("subscribeStudents");
+// const startSubscribingStudentStream = () => {
+    // var video = document.createElement("video");
+    // video.id="red5pro-subscriber"+studentName;
+
+    // const SubscriberConfiguration = {
+    //     protocol: "wss",
+    //     port: 443,
+    //     host: "red5stream.searceinc.org",
+    //     // protocol: 'ws',
+    //     // port: 5080,
+    //     // host: 'localhost',
+    //     app: 'live',
+    //     streamName: newStreamName,
+    //     rtcConfiguration: {
+    //         iceServers: [{urls: 'stun:stun2.l.google.com:19302'}],
+    //         iceCandidatePoolSize: 2,
+    //         bundlePolicy: 'max-bundle'
+    //     },
+    //     mediaElementId: video.id,
+    //     subscriptionId: 'mystream2' + Math.floor(Math.random() * 0x10000).toString(16),
+    //     videoEncoding: 'NONE',
+    //     audioEncoding: 'NONE',
+    //     rtcpMuxPolicy: 'negotiate',
+    //     }
+
+        
+    //     console.log(SubscriberConfiguration);
+        
+
+
+    
+// }
+showStudentButton.addEventListener('click', () => {
+
     var video = document.createElement("video");
-    video.id="red5pro-subscriber"+Math.random().toString(16).slice(2);
- 
+    video.id="red5pro-subscriber"+studentName;
+    const subscriber = new red5prosdk.RTCSubscriber();
     const SubscriberConfiguration = {
         protocol: "wss",
         port: 443,
@@ -243,22 +281,11 @@ joinmyclassButton.addEventListener('click', () => {
         
         console.log(SubscriberConfiguration);
         
-       // Initialize
-const showStudentButton = document.getElementById("subscribeStudents");
-const startSubscribingStudentStream = () => {
-    subscriber.init(SubscriberConfiguration).then(() => {
-        console.log('LOG :: Subscribe Init Done')
-        subscriber.subscribe();
-        console.log(SubscriberConfiguration.streamName);
-    
-    }).then(() => {
-        console.log('LOG :: Subscribe Done')
-    }).catch((error) => {
-        console.log("error coming");
-        console.log('ERROR :: ' + error);
-    });
-}
-showStudentButton.addEventListener('click', () => {
+
+
+
+
+
     SubscriberConfiguration["streamName"]=newStreamName ;
     console.log(SubscriberConfiguration);
     var divStream = document.getElementById("media-screen");
@@ -273,7 +300,19 @@ showStudentButton.addEventListener('click', () => {
     div.append(video);
     divStream.append(div);
 
-    startSubscribingStudentStream();
+    subscriber.init(SubscriberConfiguration).then(() => {
+        console.log('LOG :: Subscribe Init Done')
+        subscriber.subscribe();
+        console.log(SubscriberConfiguration.streamName);
+    
+    }).then(() => {
+        console.log('LOG :: Subscribe Done')
+    }).catch((error) => {
+        console.log("error coming");
+        console.log('ERROR :: ' + error);
+    });
+
+    // startSubscribingStudentStream();
     var T = document.getElementById("media-screen");
     T.style.display = "flex";
 
