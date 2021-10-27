@@ -18,12 +18,12 @@
     const streamNameTemp=generateStreamName(5);
     
     const configuration = {
-        // protocol: "wss",
-        // port: 443,
-        // host: "red5stream.searceinc.org",
-        protocol: 'ws',
-        port: 5080,
-        host: 'localhost',
+        protocol: "wss",
+        port: 443,
+        host: "red5stream.searceinc.org",
+        // protocol: 'ws',
+        // port: 5080,
+        // host: 'localhost',
         app: 'live',
         streamName: "mystream",
         rtcConfiguration: {
@@ -111,7 +111,7 @@
     
 
     sendButton.addEventListener('click', function () {
-        let message = document.getElementById('text-area').value
+        let message = document.getElementById('text-area').value.replace('\n','<br>');
         if (message != undefined) {
             console.log("LOG :: message :: "+message);
             so.send('messageTransmit', {
@@ -131,12 +131,12 @@
         var video = document.createElement("video");
         video.id="red5pro-publisher"+Math.random().toString(16).slice(2);
         const configurationPublisher = {
-            protocol: "ws",
-            port: 5080,
-            host: "localhost",
-            // protocol: "wss",
-            // port: 443,
-            // host: "red5stream.searceinc.org",
+            // protocol: "ws",
+            // port: 5080,
+            // host: "localhost",
+            protocol: "wss",
+            port: 443,
+            host: "red5stream.searceinc.org",
             app: "live",
             streamName: "mystream2",
             rtcConfiguration: {

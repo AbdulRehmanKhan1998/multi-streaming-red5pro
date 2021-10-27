@@ -8,12 +8,12 @@
 
     const configuration = {
         
-        protocol: "ws",
-        port: 5080,
-        host: "localhost",
-        // protocol: "wss",
-        // port: 443,
-        // host: "red5stream.searceinc.org",
+        // protocol: "ws",
+        // port: 5080,
+        // host: "localhost",
+        protocol: "wss",
+        port: 443,
+        host: "red5stream.searceinc.org",
         app: "live",
         streamName: "mystream",
         rtcConfiguration: {
@@ -115,7 +115,7 @@ joinMyClassButton.addEventListener('click', () => {
     }
   
     sendButton.addEventListener('click', () => {
-        const message = document.getElementById('text-area').value;
+        const message = document.getElementById('text-area').value.replace('\n','<br>');
         if (message != undefined) {
             console.log("LOG :: send button event listener, message", message);
             so.send('messageTransmit', {
@@ -133,12 +133,12 @@ joinMyClassButton.addEventListener('click', () => {
     video.id="red5pro-subscriber"+studentName;
     const subscriber = new red5prosdk.RTCSubscriber();
     const SubscriberConfiguration = {
-        // protocol: "wss",
-        // port: 443,
-        // host: "red5stream.searceinc.org",
-        protocol: 'ws',
-        port: 5080,
-        host: 'localhost',
+        protocol: "wss",
+        port: 443,
+        host: "red5stream.searceinc.org",
+        // protocol: 'ws',
+        // port: 5080,
+        // host: 'localhost',
         app: 'live',
         streamName: newStreamName,
         rtcConfiguration: {
