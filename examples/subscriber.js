@@ -2,10 +2,10 @@
     const subscriber = new red5prosdk.RTCSubscriber();
     const SharedObject = red5prosdk.Red5ProSharedObject;
     const sendButton = document.getElementById('send');
-    // const streamButton = document.getElementById('sendStream');
     var so=undefined;
 
-    function makeid(length) {
+    //generate random streamNameId
+    function generateStreamName(length) {
         var result           = '';
         var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         var charactersLength = characters.length;
@@ -15,21 +15,15 @@
        }
        return result;
     }
-    const streamNameTemp=makeid(5);
-    
-    console.log(streamNameTemp);
-
-
-
-
+    const streamNameTemp=generateStreamName(5);
     
     const configuration = {
-        protocol: "wss",
-        port: 443,
-        host: "red5stream.searceinc.org",
-        // protocol: 'ws',
-        // port: 5080,
-        // host: 'localhost',
+        // protocol: "wss",
+        // port: 443,
+        // host: "red5stream.searceinc.org",
+        protocol: 'ws',
+        port: 5080,
+        host: 'localhost',
         app: 'live',
         streamName: "mystream",
         rtcConfiguration: {
@@ -47,7 +41,7 @@
 
 
     // Initialize
-const showTeacherButton = document.getElementById("subscribeTeacher");
+    const showTeacherButton = document.getElementById("subscribeTeacher");
     const startSubscribingTeacherStream = () => {
         subscriber.init(configuration).then(() => {
             console.log('LOG :: Subscribe Init Done')
@@ -59,18 +53,14 @@ const showTeacherButton = document.getElementById("subscribeTeacher");
         }).catch((error) => {
             console.log('ERROR :: ' + error);
         });
-}
-showTeacherButton.addEventListener('click', () => {
-    startSubscribingTeacherStream();
-    
-    var T = document.getElementById("media-screen");
-    T.style.display = "flex";
-    
-    
-});
+    }
+    showTeacherButton.addEventListener('click', () => {
+        startSubscribingTeacherStream();
+        var showStream = document.getElementById("media-screen");
+        showStream.style.display = "flex";
+    });
 
     const messageTransmit = (message) => {
-        console.log("sub" +message)
         var div = document.getElementById("messages");
         var input = document.createElement("textarea");
         input.id = "so-field" + Math.random().toString(16).slice(2)
@@ -113,7 +103,6 @@ showTeacherButton.addEventListener('click', () => {
         so.on(red5prosdk.SharedObjectEventTypes.METHOD_UPDATE, function (event) {
             console.log('[Red5ProPublisher] SharedObject Method Update.');
             console.log(JSON.stringify(event.data, null, 2));
-            console.log(event.data.methodName);
             soCallback[event.data.methodName].call(null, event.data.message);
         
         });
@@ -124,9 +113,7 @@ showTeacherButton.addEventListener('click', () => {
     sendButton.addEventListener('click', function () {
         let message = document.getElementById('text-area').value
         if (message != undefined) {
-            console.log(message);
-            console.log("sub" +"before send function")
-            
+            console.log("LOG :: message :: "+message);
             so.send('messageTransmit', {
                 user: configuration.subscriptionId,
                 message: message
@@ -137,57 +124,49 @@ showTeacherButton.addEventListener('click', () => {
 
     //start publishing from here:
     const publisher = new red5prosdk.RTCPublisher();
+    const joinMyClassButton = document.getElementById("publishStudent");
 
-    // const startPublishingStudentStream = () => {
-       
-    // }
-
-    const joinmyclassButton = document.getElementById("publishStudent");
-
-joinmyclassButton.addEventListener('click', () => {
-
-
+    joinMyClassButton.addEventListener('click', () => {
 
         var video = document.createElement("video");
-    video.id="red5pro-publisher"+Math.random().toString(16).slice(2);
-    const configurationPublisher = {
-        // protocol: "ws",
-        // port: 5080,
-        // host: "localhost",
-        protocol: "wss",
-        port: 443,
-        host: "red5stream.searceinc.org",
-        app: "live",
-        streamName: "mystream2",
-        rtcConfiguration: {
-            iceServers: [{urls: "stun:stun2.l.google.com:19302"}],
-            iceCandidatePoolSize: 2,
-            bundlePolicy: "max-bundle",
-        },
-        streamMode: "live",
-        mediaElementId: video.id,
-        bandwidth: {
-            audio: 56,
-            video: 512,
-        },
-        mediaConstraints: {
-            audio: true,
-            video: {
-                width: {
-                    exact: 640,
-                },
-                height: {
-                    exact: 480,
-                },
-                frameRate: {
-                    min: 8,
-                    max: 24,
+        video.id="red5pro-publisher"+Math.random().toString(16).slice(2);
+        const configurationPublisher = {
+            protocol: "ws",
+            port: 5080,
+            host: "localhost",
+            // protocol: "wss",
+            // port: 443,
+            // host: "red5stream.searceinc.org",
+            app: "live",
+            streamName: "mystream2",
+            rtcConfiguration: {
+                iceServers: [{urls: "stun:stun2.l.google.com:19302"}],
+                iceCandidatePoolSize: 2,
+                bundlePolicy: "max-bundle",
+            },
+            streamMode: "live",
+            mediaElementId: video.id,
+            bandwidth: {
+                audio: 56,
+                video: 512,
+            },
+            mediaConstraints: {
+                audio: true,
+                video: {
+                    width: {
+                        exact: 640,
+                    },
+                    height: {
+                        exact: 480,
+                    },
+                    frameRate: {
+                        min: 8,
+                        max: 24,
+                    },
                 },
             },
-        },
-    }
-    configurationPublisher["streamName"]=streamNameTemp;
-    
+        }
+        configurationPublisher["streamName"]=streamNameTemp;
 
         var divStream = document.getElementById("media-screen");
         var div = document.createElement('div');
@@ -200,14 +179,10 @@ joinmyclassButton.addEventListener('click', () => {
         div.append(video);
         divStream.append(div);
 
-
-
         publisher.init(configurationPublisher).then(() => {
             console.log('LOG :: Publish Init Done');
             publisher.publish();
-            console.log(configurationPublisher.streamName);
-            console.log(configurationPublisher);
-            
+            console.log("LOG :: newStreamName :: " + configurationPublisher.streamName);
         }).then(() => {
             console.log('LOG :: Publish Done');
             generateStream() ;
@@ -215,31 +190,19 @@ joinmyclassButton.addEventListener('click', () => {
             console.log('ERROR :: ' + error);
         });
         // startPublishingStudentStream();
-        var T = document.getElementById("media-screen");
-        T.style.display = "flex";
-        
+        var showStream = document.getElementById("media-screen");
+        showStream.style.display = "flex";
+            
     });
 
-    // const generateStreamNameButton = document.getElementById("generateStreamName");
     function generateStream () {
         let message = streamNameTemp;
         if (message != undefined) {
-            console.log(message);
-            console.log("sub" +"before send function")
-            
             so.send('testTransmit', {
                 user: configuration.subscriptionId,
                 message: message
             });
         }};
-    // });
-
-    
-
-
-
-
-    
-    
+   
 
 })(window.red5prosdk);
